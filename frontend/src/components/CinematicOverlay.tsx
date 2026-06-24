@@ -108,17 +108,17 @@ function useCinematicSrc(mode: CinematicOverlayMode | null) {
   return useMemo(() => {
     const mobile = typeof window !== "undefined" && window.matchMedia("(max-width: 700px)").matches;
     if (mode === "boot" || mode === "dashboard") {
-      return "/cinematic/dashboard-panels-fill.mp4";
+      return mobile ? "/cinematic/world-earth-interface.mp4" : "/cinematic/world-core-idle.mp4";
     }
     if (mode === "config") return "/cinematic/config-book-turn.mp4";
-    if (mode === "run") return mobile ? "/cinematic/mobile-core-pour.mp4" : "/cinematic/dashboard-core-pour.mp4";
+    if (mode === "run") return "/cinematic/world-sweep-scan.mp4";
     return "";
   }, [mode]);
 }
 
 function getLabel(mode: CinematicOverlayMode | null) {
   if (mode === "config") return { kicker: "Mode shift", title: "Opening control manual" };
-  if (mode === "run") return { kicker: "Manual sequence", title: "Running briefing ritual" };
+  if (mode === "run") return { kicker: "Manual sequence", title: "Running world sweep" };
   if (mode === "dashboard") return { kicker: "Mode shift", title: "Restoring command console" };
   return { kicker: "System boot", title: "Jarvis console online" };
 }

@@ -48,6 +48,20 @@ export type SourceStatus = {
   latency: string;
 };
 
+export type WorldSignal = {
+  id: string;
+  label: string;
+  region: string;
+  category: string;
+  status: string;
+  summary: string;
+  lat: number;
+  lng: number;
+  tone: "cyan" | "amber" | "emerald" | "rose";
+  confidence: Confidence;
+  sourceCount: number;
+};
+
 export const statusCards = [
   { label: "Sources", value: "18", detail: "12 online", icon: RadioTower, tone: "cyan" },
   { label: "Trust Avg", value: "82", detail: "stable", icon: ShieldCheck, tone: "emerald" },
@@ -128,6 +142,87 @@ export const sourceStatuses: SourceStatus[] = [
   { id: "s8", name: "YouTube", type: "API", tier: "Public DB", health: "standby", topic: "Video", trust: 75, latency: "-" }
 ];
 
+export const worldSignals: WorldSignal[] = [
+  {
+    id: "europe_heat",
+    label: "Europe heatwave",
+    region: "Europe",
+    category: "Climate",
+    status: "Record heat",
+    summary: "Heat records and public warnings are clustering across Europe.",
+    lat: 48.8,
+    lng: 11.4,
+    tone: "amber",
+    confidence: "High",
+    sourceCount: 6
+  },
+  {
+    id: "iran_gulf",
+    label: "Iran and Gulf security",
+    region: "Middle East",
+    category: "Geopolitics",
+    status: "Inspection watch",
+    summary: "Nuclear inspection and Gulf security signals need close source comparison.",
+    lat: 29.5,
+    lng: 52.5,
+    tone: "rose",
+    confidence: "Medium",
+    sourceCount: 5
+  },
+  {
+    id: "india_trade_monsoon",
+    label: "India trade and monsoon",
+    region: "India",
+    category: "India",
+    status: "Policy + weather",
+    summary: "Trade talks, monsoon risk, and national policy updates are active.",
+    lat: 22.8,
+    lng: 78.9,
+    tone: "emerald",
+    confidence: "Medium",
+    sourceCount: 7
+  },
+  {
+    id: "tamil_nadu",
+    label: "Tamil Nadu signal",
+    region: "Tamil Nadu",
+    category: "Local",
+    status: "Civic watch",
+    summary: "State politics, civic utilities, and Chennai updates are being ranked.",
+    lat: 11.1,
+    lng: 78.7,
+    tone: "cyan",
+    confidence: "Medium",
+    sourceCount: 4
+  },
+  {
+    id: "ai_security",
+    label: "AI and security",
+    region: "Global Tech",
+    category: "Tech + AI",
+    status: "Compute risk",
+    summary: "AI access, privacy, and quantum-security deadlines are active signals.",
+    lat: 37.4,
+    lng: -122.1,
+    tone: "cyan",
+    confidence: "High",
+    sourceCount: 6
+  },
+  {
+    id: "health_africa",
+    label: "Public health",
+    region: "Central Africa",
+    category: "Health",
+    status: "Outbreak watch",
+    summary: "Ebola and public-health reports require official-source priority.",
+    lat: -2.7,
+    lng: 23.6,
+    tone: "rose",
+    confidence: "High",
+    sourceCount: 4
+  }
+];
+
 export const alerts = [
   { icon: Sparkles, label: "Gemini optional", value: "fallback active" },
   { icon: Zap, label: "Telegram", value: "secret pending" },
@@ -143,4 +238,3 @@ export const activity = [
   { time: "21:38", text: "Official page monitor checked", tone: "amber" },
   { time: "21:37", text: "RSS feeds ranked and deduped", tone: "rose" }
 ];
-

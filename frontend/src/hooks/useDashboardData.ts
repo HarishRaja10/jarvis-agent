@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { activity, alerts, briefingItems, sourceStatuses, statusCards, topics } from "../data/mock";
+import { activity, alerts, briefingItems, sourceStatuses, statusCards, topics, worldSignals } from "../data/mock";
 
 export function useDashboardData() {
   return useQuery({
@@ -11,8 +11,8 @@ export function useDashboardData() {
       sourceStatuses,
       alerts,
       activity,
+      worldSignals,
       generatedAt: new Date().toISOString()
     })
   });
 }
-
