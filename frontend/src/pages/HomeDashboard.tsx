@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { AlertRail } from "../components/AlertRail";
 import { BriefingPanel } from "../components/BriefingPanel";
 import { CoreOverlay } from "../components/CoreOverlay";
-import { IntelligenceCoreScene } from "../components/IntelligenceCoreScene";
 import { MetricStrip } from "../components/MetricStrip";
 import { SourceMatrix } from "../components/SourceMatrix";
 import { ScrollCinematicVideo } from "../components/ScrollCinematicVideo";
@@ -38,9 +37,6 @@ export function HomeDashboard() {
               mobileSrc="/cinematic/mobile-core-pour.mp4"
               overlay="core"
             />
-            <div className="absolute inset-0 opacity-45 mix-blend-screen">
-              <IntelligenceCoreScene />
-            </div>
             <CoreOverlay />
           </motion.section>
           <ScrollCinematicVideo
