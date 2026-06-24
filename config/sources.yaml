@@ -1,0 +1,215 @@
+sources:
+  - id: openai_blog
+    name: OpenAI News
+    type: rss
+    url: https://openai.com/news/rss.xml
+    topic_ids: [tech_ai]
+    trust_tier: official
+    enabled: true
+    language: en
+    source_groups: [official_ai, tech_ai]
+
+  - id: google_ai_blog
+    name: Google AI Blog
+    type: rss
+    url: https://blog.google/technology/ai/rss/
+    topic_ids: [tech_ai]
+    trust_tier: official
+    enabled: true
+    language: en
+    source_groups: [official_ai, tech_ai]
+
+  - id: meta_ai_blog
+    name: Meta AI Blog
+    type: official
+    url: https://ai.meta.com/blog/
+    topic_ids: [tech_ai]
+    trust_tier: official
+    enabled: true
+    language: en
+    source_groups: [official_ai, tech_ai]
+
+  - id: microsoft_ai_blog
+    name: Microsoft AI Blog
+    type: rss
+    url: https://news.microsoft.com/source/topics/ai/feed/
+    topic_ids: [tech_ai]
+    trust_tier: official
+    enabled: true
+    language: en
+    source_groups: [official_ai, tech_ai]
+
+  - id: hacker_news
+    name: Hacker News
+    type: hackernews
+    url: https://hn.algolia.com/api/v1/search_by_date
+    topic_ids: [tech_ai]
+    trust_tier: community_social
+    enabled: true
+    language: en
+    source_groups: [community_tech, tech_ai]
+    api_config:
+      hits_per_page: 25
+      tags: story
+
+  - id: reddit_tech
+    name: Reddit Tech Signals
+    type: reddit
+    topic_ids: [tech_ai]
+    trust_tier: community_social
+    enabled: true
+    language: en
+    source_groups: [community_tech, tech_ai]
+    api_config:
+      subreddits: [artificial, programming, startups]
+      limit: 10
+
+  - id: gdelt_tech_ai
+    name: GDELT Tech and AI Discovery
+    type: gdelt
+    topic_ids: [tech_ai]
+    trust_tier: public_database
+    enabled: true
+    language: multilingual
+    source_groups: [tech_ai]
+    api_config:
+      query: '(AI OR "artificial intelligence" OR OpenAI OR "generative AI" OR LLM)'
+      max_records: 25
+
+  - id: tn_gov_press
+    name: Tamil Nadu Government Press Releases
+    type: official
+    url: https://www.tn.gov.in/press_release.php
+    topic_ids: [tn_politics]
+    trust_tier: official
+    enabled: true
+    language: en
+    source_groups: [tn_government]
+
+  - id: pib_india
+    name: Press Information Bureau India
+    type: rss
+    url: https://archive.pib.gov.in/newsite/rssenglish.aspx
+    topic_ids: [tn_politics, india_politics]
+    trust_tier: official
+    enabled: true
+    language: en
+    source_groups: [india_government]
+
+  - id: election_commission
+    name: Election Commission of India
+    type: official
+    url: https://www.eci.gov.in/
+    topic_ids: [tn_politics, india_politics]
+    trust_tier: official
+    enabled: false
+    language: en
+    source_groups: [india_government]
+
+  - id: mygov_blog
+    name: MyGov Blog
+    type: rss
+    url: https://blog.mygov.in/feed/
+    topic_ids: [india_politics]
+    trust_tier: official
+    enabled: true
+    language: en
+    source_groups: [india_government]
+
+  - id: the_hindu_tn
+    name: The Hindu Tamil Nadu
+    type: rss
+    url: https://www.thehindu.com/news/national/tamil-nadu/feeder/default.rss
+    topic_ids: [tn_politics]
+    trust_tier: reputed_news
+    enabled: true
+    language: en
+    source_groups: [indian_news]
+
+  - id: the_hindu_national
+    name: The Hindu National
+    type: rss
+    url: https://www.thehindu.com/news/national/feeder/default.rss
+    topic_ids: [india_politics]
+    trust_tier: reputed_news
+    enabled: true
+    language: en
+    source_groups: [indian_news]
+
+  - id: indian_express_india
+    name: Indian Express India
+    type: rss
+    url: https://indianexpress.com/section/india/feed/
+    topic_ids: [tn_politics, india_politics]
+    trust_tier: reputed_news
+    enabled: true
+    language: en
+    source_groups: [indian_news]
+
+  - id: gdelt_tn_politics
+    name: GDELT Tamil Nadu Politics Discovery
+    type: gdelt
+    topic_ids: [tn_politics]
+    trust_tier: public_database
+    enabled: true
+    language: multilingual
+    source_groups: [indian_news, tn_government]
+    api_config:
+      query: '("Tamil Nadu" OR Chennai OR DMK OR AIADMK) (government OR election OR assembly OR policy OR budget)'
+      max_records: 25
+
+  - id: gdelt_india_politics
+    name: GDELT India Politics Discovery
+    type: gdelt
+    topic_ids: [india_politics]
+    trust_tier: public_database
+    enabled: true
+    language: multilingual
+    source_groups: [indian_news, india_government]
+    api_config:
+      query: '(India OR "New Delhi") (government OR parliament OR election OR cabinet OR ministry OR policy)'
+      max_records: 25
+
+  - id: tmdb_trending
+    name: TMDb Trending Movies and TV
+    type: tmdb
+    topic_ids: [movies_series]
+    trust_tier: public_database
+    enabled: true
+    language: en
+    source_groups: [entertainment]
+
+  - id: youtube_official_trailers
+    name: YouTube Official Trailer Signals
+    type: youtube
+    topic_ids: [movies_series, tech_ai]
+    trust_tier: public_database
+    enabled: true
+    language: en
+    source_groups: [official_trailers, tech_ai]
+    api_config:
+      queries:
+        - official trailer
+        - OpenAI
+        - Google AI
+      max_results: 8
+
+  - id: variety_entertainment
+    name: Variety Film and TV
+    type: rss
+    url: https://variety.com/v/film/news/feed/
+    topic_ids: [movies_series]
+    trust_tier: reputed_news
+    enabled: true
+    language: en
+    source_groups: [entertainment]
+
+  - id: hollywood_reporter_tv
+    name: Hollywood Reporter TV
+    type: rss
+    url: https://www.hollywoodreporter.com/t/tv-news/feed/
+    topic_ids: [movies_series]
+    trust_tier: reputed_news
+    enabled: true
+    language: en
+    source_groups: [entertainment]

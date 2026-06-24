@@ -1,0 +1,105 @@
+topics:
+  tech_ai:
+    name: Technologies and AI
+    priority: 100
+    keywords:
+      - ai
+      - artificial intelligence
+      - generative ai
+      - llm
+      - openai
+      - google ai
+      - meta ai
+      - microsoft ai
+      - startup
+      - python
+      - software
+      - security
+      - chip
+    excluded_keywords:
+      - sports
+      - horoscope
+    source_groups:
+      - tech_ai
+      - official_ai
+      - community_tech
+    max_items: 5
+    alert_threshold: 80
+
+  tn_politics:
+    name: Tamil Nadu Politics
+    priority: 95
+    keywords:
+      - tamil nadu
+      - chennai
+      - dmk
+      - aiadmk
+      - tn government
+      - mk stalin
+      - assembly
+      - election
+      - governor
+      - budget
+    excluded_keywords:
+      - cinema
+      - box office
+      - cricket
+    source_groups:
+      - tn_government
+      - india_government
+      - indian_news
+    max_items: 5
+    alert_threshold: 80
+
+  india_politics:
+    name: India Politics
+    priority: 90
+    keywords:
+      - india
+      - parliament
+      - lok sabha
+      - rajya sabha
+      - prime minister
+      - cabinet
+      - ministry
+      - election commission
+      - supreme court
+      - pib
+      - mygov
+    excluded_keywords:
+      - celebrity
+      - box office
+      - cricket
+    source_groups:
+      - india_government
+      - indian_news
+    max_items: 5
+    alert_threshold: 80
+
+  movies_series:
+    name: Movie and Series Updates
+    priority: 70
+    keywords:
+      - movie
+      - film
+      - series
+      - streaming
+      - trailer
+      - netflix
+      - prime video
+      - disney
+      - ott
+      - tamil cinema
+      - kollywood
+      - release date
+    excluded_keywords:
+      - piracy
+      - leaked
+      - torrent
+      - camrip
+    source_groups:
+      - entertainment
+      - official_trailers
+    max_items: 5
+    alert_threshold: 70
+

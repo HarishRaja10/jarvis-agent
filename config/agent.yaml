@@ -1,0 +1,10 @@
+agent_name: Jarvis
+tone: casual_jarvis
+timezone: Asia/Kolkata
+output_language: english_with_optional_tamil
+max_items_per_topic: 5
+enable_voice: false
+voice_provider: none
+storage_provider: sqlite
+min_confidence_to_send: medium
+

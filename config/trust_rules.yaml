@@ -1,0 +1,38 @@
+trust_tiers:
+  official:
+    score: 100
+    label: Official government/company/API source
+  reputed_news:
+    score: 80
+    label: Reputed news source
+  public_database:
+    score: 75
+    label: Known public database/API
+  community_social:
+    score: 40
+    label: Community/social discussion
+  unverified:
+    score: 10
+    label: Unverified viral/rumour source
+
+confidence:
+  high_min_score: 80
+  medium_min_score: 50
+  low_min_score: 0
+
+political_rules:
+  topics:
+    - tn_politics
+    - india_politics
+  confirmed_when:
+    official_sources: 1
+    reputed_sources: 2
+  social_label: unverified signal
+  action_min_confidence: medium
+
+ranking_weights:
+  trust: 0.45
+  recency: 0.25
+  relevance: 0.20
+  support: 0.10
+
