@@ -74,7 +74,7 @@ Required for Telegram delivery:
 Optional AI:
 
 - `GEMINI_API_KEY`
-- `GEMINI_MODEL` default: `gemini-1.5-flash`
+- `GEMINI_MODEL` default: `gemini-3.1-flash-lite`
 
 Optional sources:
 

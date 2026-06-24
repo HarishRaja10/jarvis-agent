@@ -12,7 +12,7 @@ class Summarizer:
     def __init__(self) -> None:
         self.logger = logging.getLogger(self.__class__.__name__)
         self.gemini_key = os.getenv("GEMINI_API_KEY")
-        self.gemini_model = os.getenv("GEMINI_MODEL") or "gemini-1.5-flash"
+        self.gemini_model = os.getenv("GEMINI_MODEL") or "gemini-3.1-flash-lite"
 
     def summarize(self, grouped: dict[str, list[SourceItem]], topics: dict[str, TopicConfig]) -> dict[str, list[SourceItem]]:
         all_items = [item for topic_items in grouped.values() for item in topic_items]
@@ -24,11 +24,13 @@ class Summarizer:
 
     def _summarize_with_gemini(self, items: list[SourceItem], topics: dict[str, TopicConfig]) -> bool:
         try:
-            import google.generativeai as genai
+            from google import genai
 
-            genai.configure(api_key=self.gemini_key)
-            model = genai.GenerativeModel(self.gemini_model)
-            response = model.generate_content(self._gemini_prompt(items, topics))
+            client = genai.Client(api_key=self.gemini_key)
+            response = client.models.generate_content(
+                model=self.gemini_model,
+                contents=self._gemini_prompt(items, topics),
+            )
             text = getattr(response, "text", "") or ""
             parsed = self._parse_json(text)
         except Exception as exc:
