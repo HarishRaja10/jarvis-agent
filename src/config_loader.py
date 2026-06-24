@@ -6,6 +6,7 @@ from typing import Any
 import yaml
 
 from models import AgentConfig, AppConfig, SourceConfig, TopicConfig
+from runtime_config import load_runtime_config, merge_runtime_config
 
 
 def _read_yaml(path: Path) -> dict[str, Any]:
@@ -24,6 +25,20 @@ def load_config(root_dir: str | Path | None = None) -> AppConfig:
     topics_raw = _read_yaml(config_dir / "topics.yaml")
     sources_raw = _read_yaml(config_dir / "sources.yaml")
     trust_rules = _read_yaml(config_dir / "trust_rules.yaml")
+    runtime = load_runtime_config(root)
+    merged = merge_runtime_config(
+        {
+            "agent": agent_raw,
+            "topics": topics_raw.get("topics") or {},
+            "sources": sources_raw.get("sources") or [],
+            "trust_rules": trust_rules,
+        },
+        runtime,
+    )
+    agent_raw = merged["agent"]
+    topics_raw = {"topics": merged["topics"]}
+    sources_raw = {"sources": merged["sources"]}
+    trust_rules = merged["trust_rules"]
 
     agent = AgentConfig(
         agent_name=str(agent_raw.get("agent_name", "Jarvis")),
@@ -67,4 +82,3 @@ def load_config(root_dir: str | Path | None = None) -> AppConfig:
     ]
 
     return AppConfig(agent=agent, topics=topics, sources=sources, trust_rules=trust_rules, root_dir=str(root))
-

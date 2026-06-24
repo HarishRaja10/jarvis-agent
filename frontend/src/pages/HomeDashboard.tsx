@@ -5,7 +5,6 @@ import { CoreOverlay } from "../components/CoreOverlay";
 import { IntelligenceCoreScene } from "../components/IntelligenceCoreScene";
 import { MetricStrip } from "../components/MetricStrip";
 import { SourceMatrix } from "../components/SourceMatrix";
-import { TopBar } from "../components/TopBar";
 import { TopicOrbitPanel } from "../components/TopicOrbitPanel";
 import { useDashboardData } from "../hooks/useDashboardData";
 
@@ -18,7 +17,6 @@ export function HomeDashboard() {
 
   return (
     <div className="min-h-[100dvh] bg-background text-foreground">
-      <TopBar />
       <main className="mx-auto grid w-full max-w-[1800px] gap-4 px-4 py-4 sm:px-6 xl:grid-cols-[330px_minmax(0,1fr)_420px]">
         <aside className="order-2 grid content-start gap-4 xl:order-1">
           <TopicOrbitPanel topics={data.topics} />

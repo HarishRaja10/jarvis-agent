@@ -204,6 +204,47 @@ alter table public.source_events enable row level security;
 
 Keep `SUPABASE_SERVICE_ROLE_KEY` server-side only. Do not expose it in frontend code.
 
+## Optional Runtime Config
+
+The PWA Config Center can export the full runtime config JSON. The Python agent can then consume that config from an inline secret, a local JSON file, or Supabase.
+
+Local file:
+
+```bash
+RUNTIME_CONFIG_PATH=jarvis-runtime-config.json
+```
+
+GitHub secret:
+
+```bash
+RUNTIME_CONFIG_JSON='{"version":1,...}'
+```
+
+Supabase-backed config:
+
+```bash
+RUNTIME_CONFIG_PROVIDER=supabase
+RUNTIME_CONFIG_ID=active
+```
+
+Run `supabase/runtime_configs.sql` in Supabase SQL Editor, then save exported PWA JSON:
+
+```sql
+insert into public.runtime_configs (config_id, config, is_active)
+values ('active', '<PASTE_EXPORTED_JSON_HERE>'::jsonb, true)
+on conflict (config_id)
+do update set config = excluded.config, is_active = true;
+```
+
+Runtime config can override:
+
+- `agent`
+- `topics`
+- `sources`
+- `trust_rules`
+
+Secrets still belong in `.env` and GitHub Secrets, not inside PWA-exported runtime JSON.
+
 ## Optional Voice
 
 Voice is disabled by default:
