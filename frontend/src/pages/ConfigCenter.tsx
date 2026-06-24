@@ -18,7 +18,6 @@ import {
 import { Badge } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";
 import { Panel } from "../components/ui/Panel";
-import { ScrollCinematicVideo } from "../components/ScrollCinematicVideo";
 import { useRuntimeConfig } from "../hooks/useRuntimeConfig";
 import type { ConfidenceFloor, RuntimeConfig, SourceRuntimeConfig, TopicRuntimeConfig } from "../types/runtimeConfig";
 
@@ -129,11 +128,6 @@ export function ConfigCenter() {
         </aside>
 
         <section className="min-w-0">
-          <ScrollCinematicVideo
-            className="mb-4 min-h-[320px] rounded-lg border border-cyan-core/20 shadow-neon sm:min-h-[460px]"
-            desktopSrc="/cinematic/config-book-turn.mp4"
-            overlay="book"
-          />
           {activeTab === "agent" ? <AgentPanel config={config} updateConfig={updateConfig} /> : null}
           {activeTab === "topics" ? <TopicsPanel config={config} selectedTopic={selectedTopic} selectedTopicId={selectedTopicId} setSelectedTopicId={setSelectedTopicId} updateConfig={updateConfig} /> : null}
           {activeTab === "sources" ? <SourcesPanel config={config} selectedSource={selectedSource} selectedSourceId={selectedSourceId} setSelectedSourceId={setSelectedSourceId} updateConfig={updateConfig} /> : null}

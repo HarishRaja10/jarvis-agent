@@ -7,9 +7,10 @@ import type { AppView } from "../App";
 type TopBarProps = {
   activeView: AppView;
   onViewChange: (view: AppView) => void;
+  onRun: () => void;
 };
 
-export function TopBar({ activeView, onViewChange }: TopBarProps) {
+export function TopBar({ activeView, onViewChange, onRun }: TopBarProps) {
   return (
     <header className="flex min-h-16 flex-col items-stretch justify-between gap-3 border-b border-border/70 px-4 py-3 sm:flex-row sm:items-center sm:px-6">
       <div className="flex min-w-0 items-center gap-3">
@@ -36,7 +37,10 @@ export function TopBar({ activeView, onViewChange }: TopBarProps) {
         <Button size="icon" aria-label="Settings" variant={activeView === "config" ? "primary" : "ghost"} onClick={() => onViewChange(activeView === "config" ? "dashboard" : "config")}>
           <Settings className="h-4 w-4" />
         </Button>
-        <Button variant="primary" className="hidden sm:inline-flex">
+        <Button size="icon" aria-label="Run briefing" className="sm:hidden" variant="primary" onClick={onRun}>
+          <Play className="h-4 w-4" />
+        </Button>
+        <Button variant="primary" className="hidden sm:inline-flex" onClick={onRun}>
           <Play className="h-4 w-4" />
           Run
         </Button>

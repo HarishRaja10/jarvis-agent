@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 import { AlertRail } from "../components/AlertRail";
 import { BriefingPanel } from "../components/BriefingPanel";
 import { CoreOverlay } from "../components/CoreOverlay";
+import { AmbientCinematicPanel } from "../components/AmbientCinematicPanel";
 import { MetricStrip } from "../components/MetricStrip";
 import { SourceMatrix } from "../components/SourceMatrix";
-import { ScrollCinematicVideo } from "../components/ScrollCinematicVideo";
 import { TopicOrbitPanel } from "../components/TopicOrbitPanel";
 import { useDashboardData } from "../hooks/useDashboardData";
 
@@ -25,25 +25,20 @@ export function HomeDashboard() {
 
         <section className="order-1 grid min-h-[calc(100vh-112px)] content-start gap-4 xl:order-2">
           <MetricStrip />
-          <motion.section
+          <motion.div
             className="relative min-h-[calc(100vh-128px)] overflow-hidden border-y border-cyan-core/20 bg-black shadow-neon-strong sm:min-h-[760px]"
             initial={{ opacity: 0, scale: 0.985 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <ScrollCinematicVideo
+            <AmbientCinematicPanel
               className="absolute inset-0"
-              desktopSrc="/cinematic/dashboard-core-pour.mp4"
-              mobileSrc="/cinematic/mobile-core-pour.mp4"
-              overlay="core"
-            />
-            <CoreOverlay />
-          </motion.section>
-          <ScrollCinematicVideo
-            className="min-h-[520px] border-y border-emerald-core/20 shadow-neon sm:min-h-[700px]"
-            desktopSrc="/cinematic/dashboard-panels-fill.mp4"
-            overlay="panels"
-          />
+              desktopSrc="/cinematic/dashboard-panels-fill.mp4"
+              mobileSrc="/cinematic/dashboard-panels-fill.mp4"
+            >
+              <CoreOverlay />
+            </AmbientCinematicPanel>
+          </motion.div>
           <AlertRail />
         </section>
 
