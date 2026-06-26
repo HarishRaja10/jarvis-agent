@@ -29,6 +29,8 @@ jobs:
       STORAGE_PROVIDER: ${{ secrets.STORAGE_PROVIDER }}
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      RUNTIME_CONFIG_PROVIDER: ${{ secrets.RUNTIME_CONFIG_PROVIDER }}
+      RUNTIME_CONFIG_ID: ${{ secrets.RUNTIME_CONFIG_ID }}
       VOICE_PROVIDER: ${{ secrets.VOICE_PROVIDER }}
       PIPER_BIN: ${{ secrets.PIPER_BIN }}
       PIPER_MODEL: ${{ secrets.PIPER_MODEL }}
@@ -46,4 +48,3 @@ jobs:
         run: python -m pytest
       - name: Send manual briefing
         run: python src/main.py --run-type "${{ inputs.run_type }}"
-

@@ -51,7 +51,7 @@ If Telegram credentials are missing, the briefing is printed locally instead of 
 
 ## Frontend PWA
 
-The web app lives in `frontend/`. It is a React + TypeScript + Vite PWA with a Three.js home dashboard, dark-mode-first neon intelligence UI, mock briefing data, source health panels, and installable PWA support.
+The web app lives in `frontend/`. It is a React + TypeScript + Vite PWA with a Three.js World Sweep dashboard, dark-mode-first neon intelligence UI, source health panels, remote runtime configuration, and installable PWA support.
 
 It also includes iPhone-friendly PWA metadata: Apple touch icons, standalone-mode meta tags, safe-area CSS for notches/Dynamic Island, and selected iPhone splash images. Final iPhone validation still requires opening the deployed HTTPS URL in Safari and using Share -> Add to Home Screen.
 
@@ -62,7 +62,14 @@ npm run dev
 npm run build
 ```
 
-The current V1 frontend uses mock data from `frontend/src/data/mock.ts`. Later, connect it to the Python agent through a FastAPI endpoint, static JSON export, or Supabase-backed API.
+The frontend reads live backend data through Cloudflare Pages Functions when deployed:
+
+- `GET /api/dashboard`: reads Supabase `source_events` and `briefing_history`
+- `GET /api/runtime-config`: reads Supabase `runtime_configs`
+- `PUT /api/runtime-config`: saves Config Center changes to Supabase
+- `POST /api/run-briefing`: triggers the GitHub Actions manual briefing workflow
+
+If those APIs are not configured, the PWA falls back to local demo data and localStorage config.
 
 ## Required GitHub Secrets
 
@@ -89,6 +96,11 @@ Optional storage:
 - `STORAGE_PROVIDER` set to `supabase` to use Supabase
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
+
+Optional runtime config:
+
+- `RUNTIME_CONFIG_PROVIDER` set to `supabase`
+- `RUNTIME_CONFIG_ID` default: `active`
 
 Optional voice:
 
@@ -203,6 +215,29 @@ alter table public.source_events enable row level security;
 ```
 
 Keep `SUPABASE_SERVICE_ROLE_KEY` server-side only. Do not expose it in frontend code.
+
+## Cloudflare Pages API
+
+When deploying `frontend/` to Cloudflare Pages, add these environment variables in Cloudflare Pages settings:
+
+Required for live dashboard/config APIs:
+
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `RUNTIME_CONFIG_ID` default: `active`
+
+Required for protected writes/actions:
+
+- `JARVIS_ADMIN_TOKEN`
+
+Required only if the PWA Run button should trigger GitHub Actions:
+
+- `GITHUB_ACTIONS_TOKEN` with workflow dispatch permission
+- `GITHUB_REPOSITORY` default: `HarishRaja10/jarvis-agent`
+- `GITHUB_WORKFLOW_FILE` default: `manual-briefing.yml`
+- `GITHUB_WORKFLOW_REF` default: `main`
+
+In the PWA Config Center, paste the same `JARVIS_ADMIN_TOKEN` into the Runtime tab before using `Save Remote` or `Run`.
 
 ## Optional Runtime Config
 

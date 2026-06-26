@@ -3,8 +3,10 @@ import {
   AlertTriangle,
   Check,
   Clipboard,
+  Cloud,
   Download,
   FileJson,
+  KeyRound,
   Plus,
   RotateCcw,
   Save,
@@ -19,6 +21,7 @@ import { Badge } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";
 import { Panel } from "../components/ui/Panel";
 import { useRuntimeConfig } from "../hooks/useRuntimeConfig";
+import { fetchRuntimeConfig, getAdminToken, saveAdminToken, saveRuntimeConfig as putRuntimeConfig } from "../lib/api";
 import type { ConfidenceFloor, RuntimeConfig, SourceRuntimeConfig, TopicRuntimeConfig } from "../types/runtimeConfig";
 
 type TabId = "agent" | "topics" | "sources" | "trust" | "schedules" | "secrets" | "runtime";
@@ -37,12 +40,13 @@ const sourceTypes = ["rss", "official", "hackernews", "reddit", "gdelt", "tmdb",
 const confidenceFloors: ConfidenceFloor[] = ["low", "medium", "high"];
 
 export function ConfigCenter() {
-  const { config, stats, updateConfig, resetConfig, importConfig, exportConfig } = useRuntimeConfig();
+  const { config, stats, setConfig, updateConfig, resetConfig, importConfig, exportConfig } = useRuntimeConfig();
   const [activeTab, setActiveTab] = useState<TabId>("agent");
   const [selectedTopicId, setSelectedTopicId] = useState(Object.keys(config.topics)[0] ?? "");
   const [selectedSourceId, setSelectedSourceId] = useState(config.sources[0]?.id ?? "");
   const [importDraft, setImportDraft] = useState("");
   const [runtimeStatus, setRuntimeStatus] = useState("Local draft");
+  const [adminToken, setAdminToken] = useState(() => getAdminToken());
 
   const selectedTopic = config.topics[selectedTopicId];
   const selectedSource = config.sources.find((source) => source.id === selectedSourceId);
@@ -59,6 +63,27 @@ export function ConfigCenter() {
       setSelectedSourceId(config.sources[0]?.id ?? "");
     }
   }, [config.sources, selectedSourceId]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setRuntimeStatus("Connecting");
+    fetchRuntimeConfig()
+      .then((response) => {
+        if (cancelled) return;
+        if (response.config) {
+          setConfig(response.config);
+          setRuntimeStatus(response.updatedAt ? `Remote ${new Date(response.updatedAt).toLocaleString()}` : "Remote loaded");
+        } else {
+          setRuntimeStatus("Remote empty");
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setRuntimeStatus("Local draft");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [setConfig]);
 
   const runtimeJson = useMemo(() => exportConfig(), [exportConfig]);
 
@@ -84,6 +109,32 @@ export function ConfigCenter() {
       setImportDraft("");
     } catch {
       setRuntimeStatus("Invalid JSON");
+    }
+  }
+
+  async function loadRemoteRuntime() {
+    setRuntimeStatus("Loading remote");
+    try {
+      const response = await fetchRuntimeConfig();
+      if (response.config) {
+        setConfig(response.config);
+        setRuntimeStatus(response.updatedAt ? `Remote ${new Date(response.updatedAt).toLocaleString()}` : "Remote loaded");
+      } else {
+        setRuntimeStatus("Remote empty");
+      }
+    } catch (error) {
+      setRuntimeStatus(error instanceof Error ? error.message : "Remote load failed");
+    }
+  }
+
+  async function saveRemoteRuntime() {
+    saveAdminToken(adminToken);
+    setRuntimeStatus("Saving remote");
+    try {
+      const response = await putRuntimeConfig(config, adminToken);
+      setRuntimeStatus(response.updatedAt ? `Saved ${new Date(response.updatedAt).toLocaleString()}` : "Remote saved");
+    } catch (error) {
+      setRuntimeStatus(error instanceof Error ? error.message : "Remote save failed");
     }
   }
 
@@ -140,9 +191,13 @@ export function ConfigCenter() {
               runtimeJson={runtimeJson}
               runtimeStatus={runtimeStatus}
               setImportDraft={setImportDraft}
+              adminToken={adminToken}
+              setAdminToken={setAdminToken}
               applyImport={applyImport}
               copyRuntimeJson={copyRuntimeJson}
               downloadRuntimeJson={downloadRuntimeJson}
+              loadRemoteRuntime={loadRemoteRuntime}
+              saveRemoteRuntime={saveRemoteRuntime}
               resetConfig={() => {
                 resetConfig();
                 setRuntimeStatus("Reset");
@@ -402,10 +457,29 @@ function SecretsPanel({ config, updateConfig }: ConfigPanelProps) {
   );
 }
 
-function RuntimePanel({ importDraft, runtimeJson, runtimeStatus, setImportDraft, applyImport, copyRuntimeJson, downloadRuntimeJson, resetConfig }: RuntimePanelProps) {
+function RuntimePanel({ importDraft, runtimeJson, runtimeStatus, setImportDraft, adminToken, setAdminToken, applyImport, copyRuntimeJson, downloadRuntimeJson, loadRemoteRuntime, saveRemoteRuntime, resetConfig }: RuntimePanelProps) {
   return (
     <Panel className="p-4">
       <PanelTitle icon={FileJson} title="Runtime" detail={runtimeStatus} />
+      <div className="mt-4 grid gap-3 rounded-md border border-border/70 bg-muted/25 p-3 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <label className="grid gap-2 text-sm">
+          <span className="inline-flex items-center gap-2 font-medium">
+            <KeyRound className="h-4 w-4 text-cyan-core" />
+            Admin API token
+          </span>
+          <input className="h-10 rounded-md border border-border bg-background/60 px-3 outline-none focus:border-cyan-core" type="password" value={adminToken} onChange={(event) => setAdminToken(event.target.value)} />
+        </label>
+        <div className="flex flex-wrap items-end gap-2">
+          <Button onClick={loadRemoteRuntime}>
+            <Cloud className="h-4 w-4" />
+            Load Remote
+          </Button>
+          <Button variant="primary" onClick={saveRemoteRuntime}>
+            <Save className="h-4 w-4" />
+            Save Remote
+          </Button>
+        </div>
+      </div>
       <div className="mt-4 grid gap-4 xl:grid-cols-2">
         <div className="grid gap-3">
           <div className="flex flex-wrap gap-2">
@@ -460,9 +534,13 @@ type RuntimePanelProps = {
   runtimeJson: string;
   runtimeStatus: string;
   setImportDraft: (value: string) => void;
+  adminToken: string;
+  setAdminToken: (value: string) => void;
   applyImport: () => void;
   copyRuntimeJson: () => void;
   downloadRuntimeJson: () => void;
+  loadRemoteRuntime: () => void;
+  saveRemoteRuntime: () => void;
   resetConfig: () => void;
 };
 

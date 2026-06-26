@@ -8,9 +8,13 @@ type TopBarProps = {
   activeView: AppView;
   onViewChange: (view: AppView) => void;
   onRun: () => void;
+  runState: "idle" | "dispatching" | "queued" | "failed";
 };
 
-export function TopBar({ activeView, onViewChange, onRun }: TopBarProps) {
+export function TopBar({ activeView, onViewChange, onRun, runState }: TopBarProps) {
+  const runBadge = runState === "dispatching" ? "Dispatching" : runState === "queued" ? "Queued" : runState === "failed" ? "API setup" : "Manual";
+  const runTone = runState === "queued" ? "emerald" : runState === "failed" ? "rose" : runState === "dispatching" ? "amber" : "emerald";
+
   return (
     <header className="flex min-h-16 flex-col items-stretch justify-between gap-3 border-b border-border/70 px-4 py-3 sm:flex-row sm:items-center sm:px-6">
       <div className="flex min-w-0 items-center gap-3">
@@ -20,7 +24,7 @@ export function TopBar({ activeView, onViewChange, onRun }: TopBarProps) {
         <div className="min-w-0">
           <h1 className="truncate text-lg font-semibold leading-tight text-foreground sm:text-xl">Jarvis Briefing Agent</h1>
           <div className="mt-1 flex flex-wrap items-center gap-2">
-            <Badge tone="emerald">Manual</Badge>
+            <Badge tone={runTone}>{runBadge}</Badge>
             <Badge tone="cyan">08:30 IST</Badge>
             <Badge tone="amber">Supabase</Badge>
           </div>

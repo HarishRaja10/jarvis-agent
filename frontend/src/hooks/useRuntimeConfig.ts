@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { defaultRuntimeConfig } from "../config/defaultRuntimeConfig";
 import type { RuntimeConfig } from "../types/runtimeConfig";
 
@@ -41,26 +41,28 @@ export function useRuntimeConfig() {
     };
   }, [config]);
 
-  function setConfig(next: RuntimeConfig) {
+  const setConfig = useCallback((next: RuntimeConfig) => {
     setConfigState(next);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-  }
+  }, []);
 
-  function updateConfig(mutator: (draft: RuntimeConfig) => void) {
+  const updateConfig = useCallback((mutator: (draft: RuntimeConfig) => void) => {
     const next = cloneConfig(config);
     mutator(next);
     setConfig(next);
-  }
+  }, [config, setConfig]);
 
-  function resetConfig() {
+  const resetConfig = useCallback(() => {
     const next = cloneConfig(defaultRuntimeConfig);
     setConfig(next);
-  }
+  }, [setConfig]);
 
-  function importConfig(raw: string) {
+  const importConfig = useCallback((raw: string) => {
     const parsed = JSON.parse(raw) as RuntimeConfig;
     setConfig({ ...cloneConfig(defaultRuntimeConfig), ...parsed });
-  }
+  }, [setConfig]);
+
+  const exportConfig = useCallback(() => JSON.stringify(config, null, 2), [config]);
 
   return {
     config,
@@ -69,6 +71,6 @@ export function useRuntimeConfig() {
     updateConfig,
     resetConfig,
     importConfig,
-    exportConfig: () => JSON.stringify(config, null, 2)
+    exportConfig
   };
 }
